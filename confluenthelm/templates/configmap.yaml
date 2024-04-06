@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+    name: my-configmaps
+    namespace: {{ .Values.namespace }}
+data:
+    snowflakeuser: EKABAGOODNESS
+    snowflakepassword: Ikujesumuyiwa@96
+    sessiontimeoutms: '45000'
+    snowflakeaccount: ja80127.eu-west-2.aws
+
+

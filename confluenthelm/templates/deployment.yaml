@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.appName }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.appName }}
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: {{ .Values.appName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.appName }}
+    spec:
+      containers:
+        - name: confluent-kafka
+          image: idowuilekura/confluent_kafka_orders
+          env:
+            - name: SNOWFLAKE_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmaps
+                  key: snowflakeuser
+            - name: SNOWFLAKE_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmaps
+                  key: snowflakepassword
+            - name: SNOWFLAKE_ACCOUNT
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmaps
+                  key: snowflakeaccount
+            - name: SNOWFLAKE_WAREHOUSE
+              value: {{ .Values.datawarehouse }}
+            - name: SNOWFLAKE_DATABASE
+              value: {{ .Values.database }}
+            - name: BOOTSTRAP_SERVERS
+              value: pkc-12576z.us-west2.gcp.confluent.cloud:9092
+            - name: SECURITY_PROTOCOL
+              value: SASL_SSL
+            - name: SASL_MECHANISMS
+              value: PLAIN
+            - name: SASL_USERNAME
+              value: BFK4SFFTA7ZX553I
+            - name: SASL_PASSWORD
+              value: 4r95t9NE6O/xLQK9yJyH8cdpDO/Hu2TCJl2SaiNv6OEGtgo3VIti1NqmTIQa63T0
+            - name: SESSION_TIMEOUT_MS
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmaps
+                  key: sessiontimeoutms
+            - name: SNOWFLAKE_TABLE
+              value: {{ .Values.tablename }}
+            # imagePullPolicy: Never
+            # asa
+          resources:
+            limits:
+              memory: 130Mi
+              cpu: 700m
+            requests:
+              memory: 128Mi
+              cpu: 500m
+          ports:
+            - containerPort: 9092

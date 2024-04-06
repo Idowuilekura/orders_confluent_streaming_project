@@ -1,0 +1,6 @@
+datawarehouse: COMPUTE_WH
+database: SHOPILEFT_DB
+appName: confluent-kafka-app
+namespace: default
+tablename: orders_shopileft_transaction
+sessiontimeoutms: '45000'

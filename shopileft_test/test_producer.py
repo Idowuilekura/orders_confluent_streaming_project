@@ -52,8 +52,8 @@ def test_loaded():
 
     producer.produce("shopileft_topic_test", key='key_1', value=str(value), callback=delivery_callback)
 
-    producer.poll(1.0)
-    # producer.flush()
+    producer.poll(10)
+    producer.flush()
     try:
         key_log, value_log = read_log(filename_fail)
     except:

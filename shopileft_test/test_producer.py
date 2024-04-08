@@ -2,7 +2,9 @@ from confluent_kafka import Producer
 import os
 import socket
 import logging 
-from read_logging import read_log
+from shopileft_test.read_logging import read_log
+import pytest 
+# import read_logging
 import json
 config = {
     "bootstrap.servers": os.getenv("BOOTSTRAP_SERVERS_TEST"),
@@ -38,6 +40,7 @@ def delivery_callback(err, msg):
 # producer.flush()
 # print('hello')
 
+
 def test_loaded():
     """
     Test the loaded data by comparing the values from the log file with the expected values.
@@ -48,8 +51,8 @@ def test_loaded():
 
     producer.produce("shopileft_topic_test", key='key_1', value=str(value), callback=delivery_callback)
 
-    # producer.poll(0)
-    producer.flush()
+    producer.poll(1.0)
+    # producer.flush()
     try:
         key_log, value_log = read_log('shopileft_producer_error.log')
     except:

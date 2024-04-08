@@ -1,1 +1,1 @@
-2024-04-06 04:48:42,490 - INFO - Produced event to topic shopileft_topic_test: key = key_1        value = {'ordertime': 1513782772235, 'orderid': 254719, 'itemid': 'Item_499', 'orderunits': 1.73566958346702, 'address': {'city': 'City_86', 'state': 'State_', 'zipcode': 74136}}
+2024-04-08 09:54:43,066 - INFO - Produced event to topic shopileft_topic_test: key = key_1        value = {'ordertime': 1513782772235, 'orderid': 254719, 'itemid': 'Item_499', 'orderunits': 1.73566958346702, 'address': {'city': 'City_86', 'state': 'State_', 'zipcode': 74136}}

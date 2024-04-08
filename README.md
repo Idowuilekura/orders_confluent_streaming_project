@@ -1,4 +1,4 @@
-# orders_confluent_streaming_project
+# Shopileft Orders Streaming Project
 Overview
 The Confluent Data Streaming Project is a comprehensive data pipeline solution designed to stream orders data from Confluent, process it with Kafka, and then load it into Snowflake for storage and analysis. Additionally, a Change Data Capture (CDC) mechanism is implemented to synchronize the data with an analytical Snowflake database table in real-time. The entire solution is containerized using Docker and deployed on Kubernetes for scalability and fault tolerance. Data transformation and warehousing are managed using dbt (data build tool). The kafka cluster is monitored with datadog to ensure the process runs as expected. 
 

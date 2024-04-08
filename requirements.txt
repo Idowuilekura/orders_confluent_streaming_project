@@ -2,3 +2,4 @@ confluent-kafka
 snowflake-connector-python
 sqlalchemy
 pandas 
+snowflake-sqlalchemy

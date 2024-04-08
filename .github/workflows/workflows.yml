@@ -24,16 +24,33 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
-      - name: Test the producer
+      - name: Install the dependencies
         run: |
             pip install -r requirements.txt
             pip install pytest
             export PYTHONPATH=$PYTHONPATH:utils
-            pytest shopileft_test/test_producer.py
+           
             ls
 
       # Runs a set of commands using the runners shell
       - name: Test the consumer
-        run: pytest shopileft_test/test_consumed_loaded.py
+        env: 
+          BOOTSTRAP_SERVERS_TEST: ${{ secrets.BOOTSTRAP_SERVERS_TEST }}
+          SASL_MECHANISMS_TEST: ${{ secrets.SASL_MECHANISMS_TEST }}
+          SASL_USERNAME_TEST: ${{ secrets.SASL_USERNAME_TEST }}
+          SASL_PASSWORD_TEST: ${{ secrets.SASL_PASSWORD_TEST }}
+          SNOWFLAKE_USER_TEST: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PASSWORD_TEST: ${{ secrets.SNOWFLAKE_PASSWORD}}
+          SNOWFLAKE_ACCOUNT_TEST: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_WAREHOUSE_TEST: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE_TEST: ${{ secrets.SNOWFLAKE_DATABASE }}
+          SESSION_TIMEOUT_MS_TEST: ${{ secrets.SESSION_TIMEOUT_MS_TEST }}
+          SECURITY_PROTOCOL_TEST: ${{ secrets.SECURITY_PROTOCOL_TEST }}
+          SNOWFLAKE_TABLE_TRANSACTIONS: ${{ secrets.SNOWFLAKE_TABLE_TRANSACTIONS }}
+          SNOWFLAKE_ACCOUNT_ANALYTICAL: ${{ secrets.SNOWFLAKE_ACCOUNT_ANALYTICAL }}
+
+        run:  | 
+             pytest shopileft_test/test_producer.py
+             pytest shopileft_test/test_consumed_loaded.py
         
 

@@ -19,6 +19,7 @@ import logging
 #     "sasl.password": os.getenv("SASL_PASSWORD_TEST"),
 #     "session.timeout.ms": 45000
 # }
+# fdfds
 # config["group.id"] = "python-group-3"
 # config["auto.offset.reset"] = "earliest"
 # user = os.getenv('SNOWFLAKE_USER')

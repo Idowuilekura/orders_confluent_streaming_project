@@ -17,16 +17,17 @@ config = {
 }
 # config["group.id"] = "python-group-1"
 # config["auto.offset.reset"] = "earliest"
-
+filename_success = os.path.join(os.path.dirname(__file__), 'shopileft_producer.log')
+filename_fail = os.path.join(os.path.dirname(__file__), 'shopileft_producer_error.log')
 def delivery_callback(err, msg):
         if err:
             print('ERROR: Message failed delivery: {}'.format(err))
-            logging.basicConfig(filename='shopileft_producer_error.log', level=logging.INFO, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s', force=True)
+            logging.basicConfig(filename=filename_fail, level=logging.INFO, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s', force=True)
             logging.info('ERROR: Message failed delivery: {}'.format(err))
         else:
             print("Produced event to topic test_jokes {topic}: key = {key:12} value = {value:12}".format(
                 topic=msg.topic(), key=msg.key().decode('utf-8'), value=msg.value().decode('utf-8')))
-            logging.basicConfig(filename='shopileft_producer_success.log', level=logging.INFO, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s',force=True)
+            logging.basicConfig(filename=filename_success, level=logging.INFO, filemode='w', format='%(asctime)s - %(levelname)s - %(message)s',force=True)
             logging.info("Produced event to topic {topic}: key = {key:12} value = {value:12}".format(
                 topic=msg.topic(), key=msg.key().decode('utf-8'), value=msg.value().decode('utf-8')))
 
@@ -51,12 +52,12 @@ def test_loaded():
 
     producer.produce("shopileft_topic_test", key='key_1', value=str(value), callback=delivery_callback)
 
-    producer.poll(1.0)
-    # producer.flush()
+    producer.poll(10)
+    producer.flush()
     try:
-        key_log, value_log = read_log('shopileft_producer_error.log')
+        key_log, value_log = read_log(filename_fail)
     except:
-        key_log, value_log = read_log('shopileft_producer_success.log')
+        key_log, value_log = read_log(filename_success)
     # print(key_log)
     # assert key_log == 'key_1'
     value_order_time = value['ordertime']
@@ -83,7 +84,7 @@ def test_loaded():
 
 
 
-print(test_loaded())
+# print(test_loaded())
 
 
 

@@ -13,9 +13,14 @@ RUN pip install -r /app/requirements.txt --no-cache-dir
 
 
 COPY ./utils /app/utils
-COPY ./consumer_conflu.py /app/consumer_conflu.py
+
+ENV PYTHONPATH=/app/utils/:$PYTHONPATH
+
+COPY ./shopileft_src/consumer_shopileft.py /app/shopileft_src/consumer_shopileft.py
 # COPY snowflake_connect.py /app/snowflake_connect.py 
 # COPY confluent_data_loader.py /app/confluent_data_loader.py
 # COPY main.py /app/main.py
 
-ENTRYPOINT ["python", "consumer_conflu.py"]
+# RUN echo ${PYTHONPATH}
+
+ENTRYPOINT ["python", "shopileft_src/consumer_shopileft.py"]

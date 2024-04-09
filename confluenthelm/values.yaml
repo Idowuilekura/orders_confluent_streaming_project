@@ -1,6 +1,7 @@
 datawarehouse: COMPUTE_WH
-database: SHOPILEFT_DB
+database: $SNOWFLAKE_DATABASE
 appName: confluent-kafka-app
 namespace: default
-tablename: orders_shopileft_transaction
+tablename_transactions: $SNOWFLAKE_TABLE_TRANSACTIONS
+tablename_analytics: $SNOWFLAKE_TABLE_ANALYTICAL
 sessiontimeoutms: '45000'

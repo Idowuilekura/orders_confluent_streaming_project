@@ -39,22 +39,21 @@ spec:
             - name: SNOWFLAKE_DATABASE
               value: {{ .Values.database }}
             - name: BOOTSTRAP_SERVERS
-              value: pkc-12576z.us-west2.gcp.confluent.cloud:9092
+              value: $BOOTSTRAP_SERVERS
             - name: SECURITY_PROTOCOL
-              value: SASL_SSL
+              value: $SECURITY_PROTOCOL
             - name: SASL_MECHANISMS
-              value: PLAIN
+              value: $SASL_MECHANISMS
             - name: SASL_USERNAME
-              value: BFK4SFFTA7ZX553I
+              value: $SASL_USERNAME
             - name: SASL_PASSWORD
-              value: 4r95t9NE6O/xLQK9yJyH8cdpDO/Hu2TCJl2SaiNv6OEGtgo3VIti1NqmTIQa63T0
+              value: $SASL_PASSWORD
             - name: SESSION_TIMEOUT_MS
-              valueFrom:
-                configMapKeyRef:
-                  name: my-configmaps
-                  key: sessiontimeoutms
-            - name: SNOWFLAKE_TABLE
-              value: {{ .Values.tablename }}
+              value: {{ .Values.sessiontimeoutms }}
+            - name: SNOWFLAKE_TABLE_TRANSACTIONS
+              value: {{ .Values.tablenametransactions }}
+            - name: SNOWFLAKE_TABLE_ANALYTICAL
+              value: {{ .Values.tablename_analytics }}
             # imagePullPolicy: Never
             # asa
           resources:

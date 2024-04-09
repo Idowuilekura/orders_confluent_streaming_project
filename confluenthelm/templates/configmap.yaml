@@ -4,9 +4,6 @@ metadata:
     name: my-configmaps
     namespace: {{ .Values.namespace }}
 data:
-    snowflakeuser: EKABAGOODNESS
-    snowflakepassword: Ikujesumuyiwa@96
-    sessiontimeoutms: '45000'
-    snowflakeaccount: ja80127.eu-west-2.aws
-
-
+    snowflakeuser: $SNOWFLAKE_USER
+    snowflakepassword: $SNOWFLAKE_PASSWORD
+    snowflakeaccount: $SNOWFLAKE_ACCOUNT

@@ -1,7 +1,0 @@
-datawarehouse: COMPUTE_WH
-database: $SNOWFLAKE_DATABASE
-appName: confluent-kafka-app
-namespace: default
-tablename_transactions: $SNOWFLAKE_TABLE_TRANSACTIONS
-tablename_analytics: $SNOWFLAKE_TABLE_ANALYTICAL
-sessiontimeoutms: '45000'

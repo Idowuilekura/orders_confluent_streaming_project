@@ -1,9 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata: 
-    name: my-configmaps
-    namespace: {{ .Values.namespace }}
-data:
-    snowflakeuser: $SNOWFLAKE_USER
-    snowflakepassword: $SNOWFLAKE_PASSWORD
-    snowflakeaccount: $SNOWFLAKE_ACCOUNT

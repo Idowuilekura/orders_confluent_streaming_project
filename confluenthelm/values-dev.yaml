@@ -1,3 +1,0 @@
-appName: confluent-kafka-app
-namespace: dev
-sessiontimeoutms: '45000'

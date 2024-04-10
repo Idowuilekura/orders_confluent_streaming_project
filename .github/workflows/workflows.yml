@@ -63,5 +63,6 @@ jobs:
              export PYTHONPATH=$PYTHONPATH:utils
              pytest shopileft_test/test_producer.py
              pytest shopileft_test/test_consumed_loaded.py
+
         
 

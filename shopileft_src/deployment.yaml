@@ -67,12 +67,15 @@ spec:
             # asa
           resources:
             limits:
-              memory: 130Mi
+              memory: 700Mi
               cpu: 700m
             requests:
-              memory: 128Mi
-              cpu: 500m
+              memory: 600Mi
+              cpu: 600m
           ports:
             - containerPort: 9092
 
+<<<<<<< HEAD:confluenthelm/templates/deployment.yaml
+=======
             
+>>>>>>> e3acfa74b9eed3e37dc24ae03a1f69c15fcffc4b:shopileft_src/deployment.yaml

@@ -30,20 +30,30 @@ def get_conn(user, password, account, warehouse, database):
 
 
 # con = mypool.connect()
-def create_insert_data(data_dict,table_name_transaction,table_name_analytics,database_conn):
+def create_insert_data(data_dict,table_name_transaction,table_name_analytics,mypool):
     print('Got the Pool Connection')
-    con = database_conn.connect()
+    con = mypool.connect()
     cur = con.cursor()
     cur.execute("CREATE SCHEMA IF NOT EXISTS raw;")
-    cur.execute(f"""CREATE TABLE IF NOT EXISTS raw.{table_name_transaction}
-                    (ordertime INTEGER, orderid INTEGER, itemid string, orderunits float,
-                    city string, state string, zipcode INTEGER, date_inserted INTEGER);""")
+    # cur.execute(f"""CREATE TABLE IF NOT EXISTS raw.{table_name_transaction}
+    #                 (ordertime INTEGER, orderid INTEGER, itemid string, orderunits float,
+    #                 city string, state string, zipcode INTEGER, date_inserted INTEGER)""")
+    cur.execute(f"""CREATE TABLE IF NOT EXISTS raw.{table_name_transaction} (
+  ordertime INTEGER,
+  orderid INTEGER,
+  itemid STRING,  -- Use uppercase for consistency with Snowflake data types
+  orderunits FLOAT,
+  city STRING,
+  state STRING,
+  zipcode INTEGER,
+  date_inserted INTEGER
+);""")
     cur.execute(f"""CREATE TABLE IF NOT EXISTS raw.{table_name_analytics}
                     (ordertime INTEGER, orderid INTEGER, itemid string, orderunits float,
-                    city string, state string, zipcode INTEGER, date_inserted INTEGER);""")
+                    city string, state string, zipcode INTEGER, date_inserted INTEGER)""")
     # cur.execute("INSERT INTO raw.employees VALUES ('John', 'Doe', 32)")
     time_unix_now = (datetime.now(tz=timezone.utc) - datetime(1970, 1, 1,tzinfo=timezone.utc)).total_seconds()
-    cur.execute(f"""CREATE STREAM IF NOT EXISTS raw.{table_name_transaction}_stream ON TABLE raw.{table_name_transaction};""")
+    cur.execute(f"""CREATE STREAM IF NOT EXISTS raw.{table_name_transaction}_stream ON TABLE raw.{table_name_transaction}""")
     cur.execute(f"""INSERT INTO raw.{table_name_transaction} (ordertime, orderid, itemid, orderunits, city, state, zipcode, date_inserted) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
                     (data_dict['ordertime'], data_dict['orderid'], data_dict['itemid'], data_dict['orderunits'], data_dict['address']['city'], data_dict['address']['state'], data_dict['address']['zipcode'], time_unix_now))
     # cur.execute("""INSERT INTO raw.coincheckrate(transaction_timestamp, transaction_id, pair, transaction_rate, transaction_amount, transaction_order_side, id_of_taker, id_of_maker) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
@@ -57,7 +67,9 @@ def create_insert_data(data_dict,table_name_transaction,table_name_analytics,dat
     cur.execute(cdc_query)
     print('done executing the cdc query')
     con.commit()
+    cur.close()
     con.close()
+    # mypool.putconn(con)
         # rows = cur.fetchall()
         # print(rows)
         # cur.execute("select * from sf.public.employees")
@@ -79,5 +91,5 @@ def create_insert_data(data_dict,table_name_transaction,table_name_analytics,dat
 #     return json.dumps(data_dict)
 
 
-def create_insert_data_(data_dict,table_name_transaction,table_name_analytics,database_conn):
-    create_insert_data(data_dict,table_name_transaction,table_name_analytics,database_conn)
+def create_insert_data_(data_dict,table_name_transaction,table_name_analytics,mypool):
+    create_insert_data(data_dict,table_name_transaction,table_name_analytics,mypool)

@@ -30,6 +30,10 @@ jobs:
         with: 
           version: 'latest'
         id: install
+      - uses: azure/setup-helm@v3
+        with: 
+          version: 'latest'
+        id: helminstall
 
 
 
@@ -63,6 +67,17 @@ jobs:
              export PYTHONPATH=$PYTHONPATH:utils
              pytest shopileft_test/test_producer.py
              pytest shopileft_test/test_consumed_loaded.py
+
+      - name: Build the container image
+        run: |
+          docker build -t idowuilekura/confluent_kafka_orders .
+      - name: push the container image to docker hub
+        env: 
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USER_NAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+          docker push idowuilekura/confluent_kafka_orders
 
         
 

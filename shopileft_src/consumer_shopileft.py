@@ -1,6 +1,9 @@
 from confluent_kafka import Consumer
-from utils.conflu_config import read_config
-from utils.confluent_data_loader import create_insert_data_, get_conn
+import sys
+# caution: path[0] is reserved for script path (or '' in REPL)
+# sys.path.append('../utils')
+from conflu_config import read_config
+from confluent_data_loader import create_insert_data_, get_conn
 import json
 import os
 from sqlalchemy.pool import QueuePool
@@ -16,8 +19,11 @@ table_name_analytical = os.getenv('SNOWFLAKE_TABLE_ANALYTICAL')
 
 print(f'database {database}')
 
+def que_conn():
+    return get_conn(user, password, account, warehouse, database)
+
 mypool = QueuePool(
-    lambda: get_conn(user, password, account, warehouse, database),
+    que_conn,
     pool_size=10,
     max_overflow=10,
 )
@@ -26,7 +32,7 @@ config = read_config()
 topic = "idowu_new"
 # from snowflake_connect import create_insert_data
 
-
+# con = mypool.connect()
 def consumer_(topic):
     config["group.id"] = "python-group-1"
     config["auto.offset.reset"] = "earliest"
@@ -48,7 +54,7 @@ def consumer_(topic):
                 print(value)
 
                 print(f"Consumed message from topic {topic}: key = {key:12} value = {value}")
-                create_insert_data_(value,table_name_transaction=table_name_transaction,table_name_analytics=table_name_analytical,database_conn=mypool)
+                create_insert_data_(value,table_name_transaction=table_name_transaction,table_name_analytics=table_name_analytical,mypool=mypool)
                 consumer.commit()
             elif msg is not None and msg.error() is not None:
                 print(f"Consumer error: {msg.error()}")

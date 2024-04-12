@@ -22,6 +22,10 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      - uses: azure/setup-helm@v3
+        with: 
+          version: 'latest'
+        id: install
 
       # Runs a single command using the runners shell
       - name: Install the dependencies
@@ -53,5 +57,18 @@ jobs:
              export PYTHONPATH=$PYTHONPATH:utils
              pytest shopileft_test/test_producer.py
              pytest shopileft_test/test_consumed_loaded.py
+      - name: build the docker container
+        run: |
+          docker build -t idowuilekura/confluent_kafka_orders .
+      - name: push the image to docker hub
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USER_NAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+          docker push idowuilekura/confluent_kafka_orders
+      - name: deploy the container on dev namespace kubernetes with helm
+        run: |
+          helm install shopileft-orders-deploy confluenthelm/ --values confluenthelm/values.yaml -f confluenthelm/values.dev.yaml -n dev --create-namespace --wait
         
 

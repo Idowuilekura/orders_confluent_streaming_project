@@ -53,16 +53,25 @@ spec:
                 configMapKeyRef:
                   name: my-configmaps
                   key: sessiontimeoutms
-            - name: SNOWFLAKE_TABLE
-              value: {{ .Values.tablename }}
+            - name: SNOWFLAKE_TABLE_TRANSACTION
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmaps
+                  key: snowflaketablename_transaction
+            - name: SNOWFLAKE_TABLE_ANALYTICAL
+              valueFrom:
+                configMapKeyRef:
+                  name: my-configmaps
+                  key: snowflaketablename_analytical
             # imagePullPolicy: Never
             # asa
           resources:
             limits:
-              memory: 130Mi
+              memory: 700Mi
               cpu: 700m
             requests:
-              memory: 128Mi
-              cpu: 500m
+              memory: 600Mi
+              cpu: 600m
           ports:
             - containerPort: 9092
+

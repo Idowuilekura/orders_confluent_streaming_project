@@ -22,10 +22,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - uses: azure/setup-helm@v3
-        with: 
-          version: 'latest'
-        id: install
       - name: Install azure cli
         run: |
             curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
@@ -34,6 +30,10 @@ jobs:
         with: 
           version: 'latest'
         id: installkubectl
+      - uses: azure/setup-helm@v3
+        with: 
+          version: 'latest'
+        id: helminstall
 
 
 
@@ -80,6 +80,17 @@ jobs:
       - name: deploy the container on dev namespace kubernetes with helm
         run: |
           helm install shopileft-orders-deploy confluenthelm/ --values confluenthelm/values.yaml -f confluenthelm/values.dev.yaml -n dev --create-namespace --wait
+
+      - name: Build the container image
+        run: |
+          docker build -t idowuilekura/confluent_kafka_orders .
+      - name: push the container image to docker hub
+        env: 
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USER_NAME }}
+          DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+          docker push idowuilekura/confluent_kafka_orders
 
         
 

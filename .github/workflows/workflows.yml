@@ -26,6 +26,16 @@ jobs:
         with: 
           version: 'latest'
         id: install
+      - name: Install azure cli
+        run: |
+            curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+            az login --service-principal -u ${{ secrets.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ secrets.ARM_TENANT_ID }}
+      - uses: azure/setup-kubectl@v3
+        with: 
+          version: 'latest'
+        id: installkubectl
+
+
 
       # Runs a single command using the runners shell
       - name: Install the dependencies
@@ -43,13 +53,13 @@ jobs:
           SASL_MECHANISMS_TEST: ${{ secrets.SASL_MECHANISMS_TEST }}
           SASL_USERNAME_TEST: ${{ secrets.SASL_USERNAME_TEST }}
           SASL_PASSWORD_TEST: ${{ secrets.SASL_PASSWORD_TEST }}
-          SNOWFLAKE_USER_TEST: ${{ secrets.SNOWFLAKE_USER }}
-          SNOWFLAKE_PASSWORD_TEST: ${{ secrets.SNOWFLAKE_PASSWORD}}
-          SNOWFLAKE_ACCOUNT_TEST: ${{ secrets.SNOWFLAKE_ACCOUNT }}
-          SNOWFLAKE_WAREHOUSE_TEST: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
-          SNOWFLAKE_DATABASE_TEST: ${{ secrets.SNOWFLAKE_DATABASE }}
           SESSION_TIMEOUT_MS_TEST: ${{ secrets.SESSION_TIMEOUT_MS_TEST }}
           SECURITY_PROTOCOL_TEST: ${{ secrets.SECURITY_PROTOCOL_TEST }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD}}
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
           SNOWFLAKE_TABLE_TRANSACTIONS: ${{ secrets.SNOWFLAKE_TABLE_TRANSACTIONS }}
           SNOWFLAKE_ACCOUNT_ANALYTICAL: ${{ secrets.SNOWFLAKE_ACCOUNT_ANALYTICAL }}
 
@@ -70,5 +80,6 @@ jobs:
       - name: deploy the container on dev namespace kubernetes with helm
         run: |
           helm install shopileft-orders-deploy confluenthelm/ --values confluenthelm/values.yaml -f confluenthelm/values.dev.yaml -n dev --create-namespace --wait
+
         
 

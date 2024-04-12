@@ -26,6 +26,7 @@ jobs:
         run: |
             curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
             az login --service-principal -u ${{ secrets.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ secrets.ARM_TENANT_ID }}
+            az aks get-credentials --resource-group ${{ secrets.RESOURCE_GROUP_ID }} --name ${{ secrets.KUBERNETES_CLUSTER_NAME }}
       - uses: azure/setup-kubectl@v3
         with: 
           version: 'latest'
@@ -77,20 +78,49 @@ jobs:
         run: |
           docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
           docker push idowuilekura/confluent_kafka_orders
+
+      - name: substitute the environemnt variables before deploying
+        env: 
+          BOOTSTRAP_SERVERS_TEST: ${{ secrets.BOOTSTRAP_SERVERS_TEST }}
+          SASL_MECHANISMS_TEST: ${{ secrets.SASL_MECHANISMS_TEST }}
+          SASL_USERNAME_TEST: ${{ secrets.SASL_USERNAME_TEST }}
+          SASL_PASSWORD_TEST: ${{ secrets.SASL_PASSWORD_TEST }}
+          SESSION_TIMEOUT_MS_TEST: ${{ secrets.SESSION_TIMEOUT_MS_TEST }}
+          SECURITY_PROTOCOL_TEST: ${{ secrets.SECURITY_PROTOCOL_TEST }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD}}
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+          SNOWFLAKE_TABLE_TRANSACTIONS: ${{ secrets.SNOWFLAKE_TABLE_TRANSACTIONS }}
+          SNOWFLAKE_ACCOUNT_ANALYTICAL: ${{ secrets.SNOWFLAKE_ACCOUNT_ANALYTICAL }}
+        run: |
+            bash substitute_env_vars_before_helm.sh
+
       - name: deploy the container on dev namespace kubernetes with helm
         run: |
-          helm install shopileft-orders-deploy confluenthelm/ --values confluenthelm/values.yaml -f confluenthelm/values.dev.yaml -n dev --create-namespace --wait
+          helm install shopileft-orders-deploy shopilefthelm/ --values shopilefthelm/values.yaml -f shopilefthelm/values-dev.yaml -n dev --create-namespace --wait
 
-      - name: Build the container image
+      - name: deploy the container on dev namespace kubernetes with helm
         run: |
-          docker build -t idowuilekura/confluent_kafka_orders .
-      - name: push the container image to docker hub
+          helm install shopileft-orders-deploy shopilefthelm/ --values shopilefthelm/values.yaml -f shopilefthelm/values-prod.yaml -n prod --create-namespace --wait
+
+      - name: substitute the environemnt variables before deploying
         env: 
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKER_USER_NAME }}
-          DOCKERHUB_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          BOOTSTRAP_SERVERS_TEST: ${{ secrets.BOOTSTRAP_SERVERS_TEST }}
+          SASL_MECHANISMS_TEST: ${{ secrets.SASL_MECHANISMS_TEST }}
+          SASL_USERNAME_TEST: ${{ secrets.SASL_USERNAME_TEST }}
+          SASL_PASSWORD_TEST: ${{ secrets.SASL_PASSWORD_TEST }}
+          SESSION_TIMEOUT_MS_TEST: ${{ secrets.SESSION_TIMEOUT_MS_TEST }}
+          SECURITY_PROTOCOL_TEST: ${{ secrets.SECURITY_PROTOCOL_TEST }}
+          SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
+          SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD}}
+          SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          SNOWFLAKE_WAREHOUSE: ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          SNOWFLAKE_DATABASE: ${{ secrets.SNOWFLAKE_DATABASE }}
+          SNOWFLAKE_TABLE_TRANSACTIONS: ${{ secrets.SNOWFLAKE_TABLE_TRANSACTIONS }}
+          SNOWFLAKE_ACCOUNT_ANALYTICAL: ${{ secrets.SNOWFLAKE_ACCOUNT_ANALYTICAL }}
         run: |
-          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
-          docker push idowuilekura/confluent_kafka_orders
-
-        
+              bash substitute_env_vars_after_helm.sh
+          
 

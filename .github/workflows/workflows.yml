@@ -26,7 +26,6 @@ jobs:
         run: |
             curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
             az login --service-principal -u ${{ secrets.ARM_CLIENT_ID }} -p ${{ secrets.ARM_CLIENT_SECRET }} --tenant ${{ secrets.ARM_TENANT_ID }}
-            az aks get-credentials --name ${{ secrets.KUBERNETES_CLUSTER_NAME }} --overwrite-existing --resource-group ${{ secrets.RESOURCE_GROUP_ID }}
       - uses: azure/setup-kubectl@v3
         with: 
           version: 'latest'

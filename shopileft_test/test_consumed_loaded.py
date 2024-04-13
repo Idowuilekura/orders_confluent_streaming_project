@@ -1,6 +1,6 @@
 # from confconfluent_data_loader import get_conn
 from sqlalchemy.pool import QueuePool
-from snowflake.sqlalchemy import URL
+# from snowflake.sqlalchemy import URL
 import pandas as pd
 from utils.conflu_config import read_config
 from utils.confluent_data_loader import create_insert_data_, get_conn

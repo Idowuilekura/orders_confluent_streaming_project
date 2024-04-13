@@ -1,0 +1,5 @@
+appName: shopileft-orders-app
+namespace: default
+image: 
+  name: idowuilekura/confluent_kafka_orders
+  imageTag: latest

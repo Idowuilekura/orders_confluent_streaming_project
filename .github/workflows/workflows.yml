@@ -99,12 +99,10 @@ jobs:
 
       - name: deploy the container on dev namespace kubernetes with helm
         run: |
-          helm uninstall shopileft-orders-deploy -n dev
           helm install shopileft-orders-deploy shopilefthelm/ --values shopilefthelm/values.yaml -f shopilefthelm/values-dev.yaml -n dev --create-namespace --wait
 
       - name: deploy the container on dev namespace kubernetes with helm
         run: |
-          helm uninstall shopileft-orders-deploy -n prod
           helm install shopileft-orders-deploy shopilefthelm/ --values shopilefthelm/values.yaml -f shopilefthelm/values-prod.yaml -n prod --create-namespace --wait
 
       - name: substitute the environemnt variables before deploying

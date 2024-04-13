@@ -1,5 +1,7 @@
 appName: shopileft-orders-app
 namespace: default
+database: $SNOWFLAKE_DATABASE
+datawarehouse: $SNOWFLAKE_WAREHOUSE
 image: 
   name: idowuilekura/confluent_kafka_orders
   imageTag: latest

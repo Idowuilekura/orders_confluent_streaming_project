@@ -10,4 +10,5 @@ data:
     snowflakeaccount: ${SNOWFLAKE_ACCOUNT}
     snowflaketablename_transaction: ${SNOWFLAKE_TABLE_TRANSACTION}
     snowflaketablename_analytical: ${SNOWFLAKE_TABLE_ANALYTICAL}
+    database: $SNOWFLAKE_DATABASE
 

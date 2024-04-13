@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
         - name: {{ .Values.appName }}
-          image: {{ .Values.image.name }}
+          image: "{{ .Values.image.name }}:{{ .Values.image.imageTag }}"
+          imagePullPolicy: Always
           env:
             - name: SNOWFLAKE_USER
               valueFrom:
@@ -63,7 +64,6 @@ spec:
                 configMapKeyRef:
                   name: my-configmaps
                   key: snowflaketablename_analytical
-            # imagePullPolicy: Never
             # asa
           resources:
             limits:

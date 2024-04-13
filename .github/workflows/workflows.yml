@@ -113,6 +113,12 @@ jobs:
           SASL_PASSWORD_TEST: ${{ secrets.SASL_PASSWORD_TEST }}
           SESSION_TIMEOUT_MS_TEST: ${{ secrets.SESSION_TIMEOUT_MS_TEST }}
           SECURITY_PROTOCOL_TEST: ${{ secrets.SECURITY_PROTOCOL_TEST }}
+          BOOTSTRAP_SERVERS: ${{ secrets.BOOTSTRAP_SERVERS }}
+          SASL_MECHANISMS: ${{ secrets.SASL_MECHANISM }}
+          SASL_USERNAME: ${{ secrets.SASL_USERNAME}}
+          SASL_PASSWORD: ${{ secrets.SASL_PASSWORD}}
+          SESSION_TIMEOUT_MS: ${{ secrets.SESSION_TIMEOUT_MS }}
+          SECURITY_PROTOCOL: ${{ secrets.SECURITY_PROTOCO }}
           SNOWFLAKE_USER: ${{ secrets.SNOWFLAKE_USER }}
           SNOWFLAKE_PASSWORD: ${{ secrets.SNOWFLAKE_PASSWORD}}
           SNOWFLAKE_ACCOUNT: ${{ secrets.SNOWFLAKE_ACCOUNT }}

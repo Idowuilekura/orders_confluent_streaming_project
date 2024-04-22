@@ -1,6 +1,6 @@
 # Shopileft Orders Streaming Project
 Overview
-The Confluent Data Streaming Project is a comprehensive data pipeline solution designed to stream orders data from Confluent, process it with Kafka, and then load it into Snowflake for storage and analysis. Additionally, a Change Data Capture (CDC) mechanism is implemented to synchronize the data with an analytical Snowflake database table in real-time. The entire solution is containerized using Docker and deployed on Kubernetes for scalability and fault tolerance. Data transformation and warehousing are managed using dbt (data build tool). The kafka cluster is monitored with datadog to ensure the process runs as expected. 
+The Confluent Data Streaming Project is a comprehensive data pipeline solution designed to stream orders data from Confluent, process it with Kafka, and then load it into Snowflake for storage and analysis. Additionally, a Change Data Capture (CDC) mechanism is implemented to synchronize the data with an analytical Snowflake database table in real time. The entire solution is containerized using Docker and deployed on Kubernetes for scalability and fault tolerance. Data transformation and warehousing are managed using dbt (data build tool). The kafka cluster is monitored with datadog to ensure the process runs as expected. 
 
 Components
 1. Confluent:
@@ -34,4 +34,8 @@ Load Data into Snowflake: Load the processed orders data into Snowflake for stor
 Implement CDC to Analytical Postgres: Implement Change Data Capture (CDC) to synchronize the data with an analytical Postgres database for real-time analytics.
 Containerize with Docker: Containerize the application code using Docker for consistency and portability.
 Deploy on Kubernetes: Deploy the Docker containers on Kubernetes for orchestration and management.
-Use dbt for Data Warehousing: Utilize dbt for creating and managing data warehouses, enabling efficient data transformation and analysis.
+Use dbt for Data Warehousing: Use dbt to create and manage data warehouses, enabling efficient data transformation and analysis.
+
+## Data Architecture 
+![image](https://github.com/Idowuilekura/orders_confluent_streaming_project/assets/38056084/c33b26db-3245-431a-9f73-76ed4806888d)
+

@@ -38,3 +38,7 @@ Use dbt for Data Warehousing: Use dbt to create and manage data warehouses, enab
 ## Data Architecture 
 ![image](https://github.com/Idowuilekura/orders_confluent_streaming_project/assets/38056084/c33b26db-3245-431a-9f73-76ed4806888d)
 
+### Data Dog Kafka Cluster Monitoring
+![image](https://github.com/Idowuilekura/orders_confluent_streaming_project/assets/38056084/723494aa-b671-48ee-ad6d-9d5793abfee1)
+
+
